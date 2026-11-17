@@ -1,0 +1,12 @@
+
+services:
+  web:
+    build: .
+    container_name: cloudtask
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_PATH: /app/data/cloudtask.db
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped

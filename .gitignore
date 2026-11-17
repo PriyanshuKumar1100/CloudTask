@@ -1,0 +1,20 @@
+
+# Python virtual environment
+venv/
+__pycache__/
+*.py[cod]
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Database files (contains user data)
+*.db
+data/
+
+# IDE and OS files
+.vscode/
+.DS_Store
+
+# Git
+.git/

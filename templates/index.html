@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | CloudTask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard-body">
+
+    <header class="navbar">
+        <div class="logo">☁ CloudTask</div>
+        <div class="nav-right">
+            <span>Welcome, {{ session.username }}</span>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="welcome-section">
+            <div>
+                <h1>My Dashboard</h1>
+                <p class="muted">Organize your work and stay productive.</p>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stat-card">
+                <span>Total Tasks</span>
+                <h2>{{ tasks|length }}</h2>
+            </div>
+            <div class="stat-card">
+                <span>Completed</span>
+                <h2>{{ tasks|selectattr('status', 'equalto', 'Completed')|list|length }}</h2>
+            </div>
+            <div class="stat-card">
+                <span>Pending</span>
+                <h2>{{ tasks|selectattr('status', 'equalto', 'Pending')|list|length }}</h2>
+            </div>
+        </section>
+
+        <section class="panel">
+            <h2>Add a New Task</h2>
+            <form action="{{ url_for('add_task') }}" method="POST" class="task-form">
+                <input type="text" name="title" placeholder="What needs to be done?" required>
+                <input type="text" name="description" placeholder="Task description (optional)">
+                <button type="submit" class="primary-btn">+ Add Task</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Your Tasks</h2>
+
+            {% if tasks %}
+                <div class="task-list">
+                    {% for task in tasks %}
+                    <div class="task-card">
+                        <div class="task-info">
+                            <h3>{{ task.title }}</h3>
+                            <p>{{ task.description or 'No description provided' }}</p>
+                            <span class="status {{ task.status|lower|replace(' ', '-') }}">
+                                {{ task.status }}
+                            </span>
+                        </div>
+
+                        <div class="task-actions">
+                            <form action="{{ url_for('update_task', task_id=task.id) }}" method="POST">
+                                <select name="status" onchange="this.form.submit()">
+                                    <option value="Pending" {% if task.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                    <option value="In Progress" {% if task.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                    <option value="Completed" {% if task.status == 'Completed' %}selected{% endif %}>Completed</option>
+                                </select>
+                            </form>
+
+                            <form action="{{ url_for('delete_task', task_id=task.id) }}" method="POST"
+                                  onsubmit="return confirm('Delete this task?')">
+                                <button type="submit" class="delete-btn">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h3>No tasks yet!</h3>
+                    <p>Add your first task to get started.</p>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="footer">
+        CloudTask · Cloud-Native Task Management System
+    </footer>
+
+</body>
+</html>

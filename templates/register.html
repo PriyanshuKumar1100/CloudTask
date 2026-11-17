@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | CloudTask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-body">
+    <div class="auth-card">
+        <div class="logo">☁ CloudTask</div>
+        <h1>Create account</h1>
+        <p class="muted">Start organizing your tasks today.</p>
+
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <div class="alert">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
+        <form method="POST">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Choose username" required>
+
+            <label>Password</label>
+            <input type="password" name="password" minlength="6"
+                   placeholder="Minimum 6 characters" required>
+
+            <button type="submit" class="primary-btn">Create Account</button>
+        </form>
+
+        <p class="auth-footer">
+            Already registered?
+            <a href="{{ url_for('login') }}">Sign in</a>
+        </p>
+    </div>
+</body>
+</html>
