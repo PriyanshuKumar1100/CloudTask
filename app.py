@@ -190,6 +190,9 @@ def logout():
     return redirect(url_for("login"))
 
 
+# Initialize database when application starts
+init_db()
+
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
